@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cmgr"
+description = "A configuratable config manager for your packages."
+requires-python = ">=3.8"
+readme = "README.md"
+keywords = ["python3", "configuratable", "config", "manager"]
+license = {file = "LICENSE"}
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = ["consoleiotools", "consolecmdtools>=6.4.0"]
+dynamic = ["version"]
+
+[[project.authors]]
+name = "Kyan"
+email = "kai@kyan001.com"
+
+[project.optional-dependencies]
+dev = ["build", "wheel"]
+
+[project.urls]
+Homepage = "https://github.com/kyan001/PyConfigManager"
+Changelog = "https://github.com/kyan001/PyConfigManager/blob/master/CHANGELOG.md"
+"Issue Tracker" = "https://github.com/kyan001/PyConfigManager/issues"
+"Source Code" = "https://github.com/kyan001/PyConfigManager"
+
+[project.scripts]
+cmgr = "cmgr.command_line:main"
+
+[tool.setuptools]
+py-modules = ["cmgr"]
+
+[tool.setuptools.dynamic]
+version = {attr = "cmgr.__version__"}
+
+[tool.setuptools.packages.find]
+exclude = ["contrib", "docs", "tests"]

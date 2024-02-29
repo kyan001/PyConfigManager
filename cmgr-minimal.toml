@@ -1,0 +1,8 @@
+name = "Zsh"
+
+[[config]]
+src = "zshrc"
+dst = "~/.zshrc"
+
+[[install]]
+name = "zsh"
