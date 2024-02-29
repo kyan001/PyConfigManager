@@ -21,27 +21,37 @@ def main(context: click.Context = None, profile: str = None, root: str = None, f
 @click.option("-c", "--command", "command", default=None, help="The command to detect the package installation.")
 @click.option("-m", "--manager", "manager", default=None, help="The package manager to install the package.")
 def install(name: str, command: str = None, manager: str = None):
-    package: dict = {
-        "name": name,
+    cmgr_info: dict = {
+        "install": [
+            {
+                "name": name,
+            }
+        ],
     }
     if command:
-        package["command"] = command
+        cmgr_info["install"][0]["command"] = command
     if manager:
-        package["manager"] = manager
-    return cmgr.ensure_packages(package)
+        cmgr_info["install"][0]["manager"] = manager
+    config_manager = cmgr.make_configmanager(cmgr_info)
+    return cmgr.run_configmanager(config_manager)
+
 
 @main.command()
 @click.argument("src", default=None)
 @click.argument("dst", default=None)
 @click.option("-n", "--name", "name", default=None, help="The name of the package.")
 def config(src: str, dst: str, name: str = None):
-    configlet: dict = {
-        "src": src,
-        "dst": dst,
+    cmgr_info: dict = {
+        "config": [
+            {
+                "src": src,
+                "dst": dst,
+            }
+        ],
     }
-    if "name":
-        configlet["name"] = name
-    config_manager = cmgr.make_configmanager(configlet)
+    if name:
+        cmgr_info["name"] = name
+    config_manager = cmgr.make_configmanager(cmgr_info)
     return cmgr.run_configmanager(config_manager)
 
 

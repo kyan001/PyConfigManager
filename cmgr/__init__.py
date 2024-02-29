@@ -12,7 +12,7 @@ else:
     raise ImportError("No TOML parser lib found in {libs}!")
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 CMGR_PROFILE_FILENAME = 'cmgr.toml'  # Config Manager profile is the config file for cmgr itself.
 
 
@@ -42,8 +42,8 @@ def _parse_src_or_dst(path_or_cmd: str) -> cct.Path:
 
 
 def print_profile_help():
-    minimal_profile_url = "https://github.com/kyan001/PyConfigManager/raw/master/cmgr-minimal.toml"
-    example_profile_url = "https://github.com/kyan001/PyConfigManager/raw/master/cmgr-example.toml"
+    minimal_profile_url = "https://github.com/kyan001/PyConfigManager/raw/main/cmgr-minimal.toml"
+    example_profile_url = "https://github.com/kyan001/PyConfigManager/raw/main/cmgr-example.toml"
     cit.info("Here is a minimal Config Manager profile example:")
     cit.print(cct.read_url(minimal_profile_url).decode())
     cit.info(f"For more details, visit: {example_profile_url}")
