@@ -1,3 +1,5 @@
+import os
+
 import click
 
 import cmgr
@@ -6,9 +8,9 @@ import cmgr
 @click.group(invoke_without_command=True)
 @click.option("-p", "--profile", "profile", default=None, help="The path of the cmgr profile file.")
 @click.option("-n", "--name", "filename", default=cmgr.CMGR_PROFILE_FILENAME, help="The filename of the cmgr profile file.")
-@click.option("-r", "--root", "root", default=None, help="The root directory to discover config manager conf files.")
+@click.option("-r", "--root", "root", default=os.getcwd(), help="The root directory to discover config manager conf files.")
 @click.pass_context
-def main(context: click.Context = None, profile: str = None, root: str = None, filename: str = cmgr.CMGR_PROFILE_FILENAME):
+def main(context: click.Context = None, profile: str = None, root: str = os.getcwd(), filename: str = cmgr.CMGR_PROFILE_FILENAME):
     if context.invoked_subcommand is None:
         if not profile:
             return cmgr.run_all_configmanager(root=root, filename=filename)
