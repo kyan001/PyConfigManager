@@ -16,15 +16,11 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
 ]
-dependencies = ["consoleiotools", "consolecmdtools>=6.4.0"]
-dynamic = ["version"]
+dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [[project.authors]]
 name = "Kyan"
 email = "kai@kyan001.com"
-
-[project.optional-dependencies]
-dev = ["build", "wheel"]
 
 [project.urls]
 Homepage = "https://github.com/kyan001/PyConfigManager"
@@ -40,6 +36,8 @@ py-modules = ["cmgr"]
 
 [tool.setuptools.dynamic]
 version = {attr = "cmgr.__version__"}
+dependencies = {file = "requirements.txt"}
+optional-dependencies = {dev = {file = "requirements-dev.txt"}}
 
 [tool.setuptools.packages.find]
 exclude = ["contrib", "docs", "tests"]
