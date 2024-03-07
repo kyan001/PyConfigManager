@@ -2,7 +2,7 @@ import os
 
 import consoleiotools as cit
 import consolecmdtools as cct
-for lib in (libs := ['tomllib', 'tomli', 'tomlkit']):
+for lib in (libs := ['tomllib', 'tomli']):
     try:
         toml_parser = __import__(lib)
         break
@@ -12,7 +12,7 @@ else:
     raise ImportError("No TOML parser lib found in {libs}!")
 
 
-__version__ = "0.0.4"
+__version__ = "0.0.6"
 
 
 CMGR_PROFILE_FILENAME = 'cmgr.toml'  # Config Manager profile is the config file for cmgr itself.
