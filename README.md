@@ -1,6 +1,8 @@
 # Config Manager (cmgr)
 [CHANGELOG](CHANGELOG.md)
 
+[cmgr](https://github.com/kyan001/PyConfigManager) is a command-line tool to manage configurations and packages. It's designed to be simple and easy to use. It's written in Python and can be installed via pip and pipx.
+
 ## Get Started
 
 ```sh
