@@ -17,6 +17,11 @@ class test_cmgr(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_version(self):
+        with patch("sys.stdout", new=io.StringIO()) as fake_out:
+            self.assertRaises(SystemExit, command_line.main, ['--version'])
+            self.assertIn('.', fake_out.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2, exit=False)
