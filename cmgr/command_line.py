@@ -9,6 +9,7 @@ import cmgr
 @click.option("-p", "--profile", "profile", default=None, help="The path of the cmgr profile file.")
 @click.option("-n", "--name", "filename", default=cmgr.CMGR_PROFILE_FILENAME, help="The filename of the cmgr profile file.")
 @click.option("-r", "--root", "root", default=os.getcwd(), help="The root directory to discover config manager conf files.")
+@click.version_option(version=cmgr.__version__)
 @click.pass_context
 def main(context: click.Context = None, profile: str = None, root: str = os.getcwd(), filename: str = cmgr.CMGR_PROFILE_FILENAME):
     if context.invoked_subcommand is None:
@@ -55,6 +56,12 @@ def config(src: str, dst: str, name: str = None):
         cmgr_info["name"] = name
     config_manager = cmgr.make_configmanager(cmgr_info)
     return cmgr.run_configmanager(config_manager)
+
+
+@click.version_option()
+@click.command()
+def version():
+    click.echo(cmgr.__version__)
 
 
 if __name__ == "__main__":
