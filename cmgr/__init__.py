@@ -12,17 +12,16 @@ else:
     raise ImportError("No TOML parser lib found in {libs}!")
 
 
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 
 CMGR_PROFILE_FILENAME = 'cmgr.toml'  # Config Manager profile is the config file for cmgr itself.
 
 
-def _soft_raise(text: str):
-    """Print the error message, pause the program and exit."""
+def _raise(text: str):
+    """Print the error message and exit."""
     cit.err(text)
-    cit.pause()
-    cit.bye()
+    exit(1)
 
 
 def _parse_src_or_dst(path_or_cmd: str) -> cct.Path:
@@ -35,7 +34,7 @@ def _parse_src_or_dst(path_or_cmd: str) -> cct.Path:
         cct.Path: The parsed path.
     """
     if not path_or_cmd:
-        _soft_raise("The input of `_parse_src_or_dst()` is empty!")
+        _raise("The input of `_parse_src_or_dst()` is empty!")
     if os.path.isfile(path_or_cmd):  # path_or_cmd is a file
         return cct.get_path(path_or_cmd)
     if cct.is_cmd_exist(path_or_cmd):  # path_or_cmd is a command
@@ -43,7 +42,7 @@ def _parse_src_or_dst(path_or_cmd: str) -> cct.Path:
     return cct.get_path(path_or_cmd)  # path_or_cmd is not a existing file or a valid command, guess it's a file path
 
 
-def print_profile_help():
+def print_profile_help() -> None:
     minimal_profile_url = "https://github.com/kyan001/PyConfigManager/raw/main/cmgr-minimal.toml"
     example_profile_url = "https://github.com/kyan001/PyConfigManager/raw/main/cmgr-example.toml"
     cit.info("Here is a minimal Config Manager profile example:")
@@ -90,12 +89,11 @@ def get_configmanager(path: str) -> dict:
     if not cmgr_profile_path.exists:
         cit.warn(f"cmgr profile file `{path}` not found!")
         print_profile_help()
-        cit.pause()
-        cit.bye()
+        exit(1)
     with open(cmgr_profile_path, 'rb') as fl:
         cmgr_info = toml_parser.load(fl)
     if not cmgr_info:
-        _soft_raise(f"Bad cmgr config file `{path}`!")
+        _raise(f"Bad cmgr config file `{path}`!")
     cmgr_info['path'] = cmgr_profile_path  # add the path of the Config Manager profile to the Config Manager info.
     return make_configmanager(cmgr_info)
 
@@ -118,21 +116,21 @@ def make_configmanager(info: dict) -> dict:
     if info.get('install'):
         for package in info.get('install'):
             if not package.get('name'):
-                _soft_raise(f"Package name not found in {package}!")
+                _raise(f"Package name not found in {package}!")
             if not package.get('cmd'):
                 package['cmd'] = package['name']
     if info.get('config'):
         for config in info.get('config'):
             if not config.get('src'):
-                _soft_raise(f"Source config file path not found in {config}!")
+                _raise(f"Source config file path not found in {config}!")
             src = _parse_src_or_dst(config.get('src'))
             if not src.exists and not os.path.isabs(src):  # try to find the source file in the directory of the Config Manager profile.
                 src = cct.get_path(os.path.join(info.get('path').parent, config.get('src')))
             if not src.exists:
-                _soft_raise(f"Source config file not found: {src}!")
+                _raise(f"Source config file not found: {src}!")
             config['src'] = src
             if not config.get('dst'):
-                _soft_raise(f"Destination config file path not found in {config}!")
+                _raise(f"Destination config file path not found in {config}!")
             config['dst'] = cct.get_path(_parse_src_or_dst(config.get('dst')))
             if not config.get('name'):
                 config['name'] = src.basename
@@ -157,7 +155,7 @@ def discover_cmgr_confs(filename: str, root: str = None) -> list[cct.Path]:
         list[str]: A list of Config Manager profile paths.
     """
     if not filename:
-        _soft_raise("The `filename` of Config Manager profile is empty!")
+        _raise("The `filename` of Config Manager profile is empty!")
     if not root:
         root = os.getcwd()
     if not isinstance(root, cct.Path):
@@ -170,7 +168,7 @@ def discover_cmgr_confs(filename: str, root: str = None) -> list[cct.Path]:
     return cmgr_profiles
 
 
-def run_configmanager(config_manager: dict):
+def run_configmanager(config_manager: dict) -> None:
     """Run the config manager.
 
     Args:
@@ -185,7 +183,7 @@ def run_configmanager(config_manager: dict):
 
     # install dependencies
     if dependencies and not ensure_packages(dependencies):
-        _soft_raise("Failed to install dependencies!")
+        _raise("Failed to install dependencies!")
 
     # update config files
     if configlets:
@@ -210,7 +208,7 @@ def run_configmanager(config_manager: dict):
             cct.copy_file(src, dst, backup=True, ensure=True, msgout=cit.info)
 
 
-def run_all_configmanager(filename: str = CMGR_PROFILE_FILENAME, root: str = cct.get_path(__file__).parent):
+def run_all_configmanager(filename: str = CMGR_PROFILE_FILENAME, root: str = cct.get_path(__file__).parent) -> None:
     avail_cmgr_profiles: list[cct.Path] = discover_cmgr_confs(filename, root)
     if len(avail_cmgr_profiles) == 0:
         cit.warn("No cmgr config file found!")
@@ -223,4 +221,3 @@ def run_all_configmanager(filename: str = CMGR_PROFILE_FILENAME, root: str = cct
         for cmgr_conf_path in cmgr_conf_paths:
             config_manager = get_configmanager(cmgr_conf_path)
             run_configmanager(config_manager)
-    cit.pause()
