@@ -1,21 +1,21 @@
-name = "My Config Manager"  # (Optional)
+name = "My Config Manager"  # Optional
     # Config Manager name, which is used to identify the Config Manager.
     # If not provided, will use the folder basename as the Config Manager name.
 
-[[config]]  # Configs (Optional)
+# Configs
+[[config]]  # Optional
     # The Config Manager will replace the destination config files with the source config files.
-name = "My Config"  # (Optional)
+name = "My Config"  # Optional
     # The config name used to identify the config file.
     # If not provided, will use the src file basename as the config name.
-src = "my.conf"  # (Required)
+src = "my.conf"  # Required
     # Source config file path, which should contain the new config.
     # The folder contains Config Manager Profile considered as the `./` folder.
     # e.g. `my.conf`, `./my.conf` or `./path/to/my.conf`
-dst = "~/.my.comf"  # (Required)
+dst = "~/.my.comf"  # Required
     # Destination config file path, which should be the path to the current config.
     # If the path is existed, the Config Manager will backup the file before replacing it.
     # If the path is not existed, the Config Manager will create the folders and file.
-
 
 [[config]]  # Multiple config files can be listed
     # Both the source path and the destination path can be a command.
@@ -23,15 +23,16 @@ dst = "~/.my.comf"  # (Required)
 src = "echo './my.conf'"
 dst = "cmd --config-file"
 
-[[install]]  # Dependencies (Optional)
+# Dependencies
+[[install]]  # Optional
     # Dependencies are installed before placing the config files.
-name = "cmgr"  # (Required)
+name = "cmgr"  # Required
     # The package name used in installation.
-command = "cmgr"  # (Optional)
+command = "cmgr"  # Optional
     # The package command to test if the package is already installed.
     # If not provided, will use the package name as the command.
     # The short version `cmd` is also supported.
-manager = "pip3"  # (Optional)
+manager = "pip3"  # Optional
     # The Package manager to install the package.
     # If not provided, will use the default package manager, which is Scoop for Windows, Homebrew for macOS.
     # The short version `mgr` is also supported.
