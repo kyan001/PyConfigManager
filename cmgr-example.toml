@@ -1,48 +1,47 @@
-# Config Manager name, which is used to identify the Config Manager.
-# If not provided, will use the folder basename as the Config Manager name.
 name = "My Config Manager"  # (Optional)
+    # Config Manager name, which is used to identify the Config Manager.
+    # If not provided, will use the folder basename as the Config Manager name.
 
-# Configs [Optional]
-# The Config Manager will replace the destination config files with the source config files.
-[[config]]  # (Optional)
-# The config name used to identify the config file.
-# If not provided, will use the src file basename as the config name.
+[[config]]  # Configs (Optional)
+    # The Config Manager will replace the destination config files with the source config files.
 name = "My Config"  # (Optional)
-# Source config file path, which should contain the new config.
-# The folder contains Config Manager Profile considered as the `./` folder.
-# e.g. `my.conf`, `./my.conf` or `./path/to/my.conf`
+    # The config name used to identify the config file.
+    # If not provided, will use the src file basename as the config name.
 src = "my.conf"  # (Required)
-# Destination config file path, which should be the path to the current config.
-# If the path is existed, the Config Manager will backup the file before replacing it.
-# If the path is not existed, the Config Manager will create the folders and file.
+    # Source config file path, which should contain the new config.
+    # The folder contains Config Manager Profile considered as the `./` folder.
+    # e.g. `my.conf`, `./my.conf` or `./path/to/my.conf`
 dst = "~/.my.comf"  # (Required)
+    # Destination config file path, which should be the path to the current config.
+    # If the path is existed, the Config Manager will backup the file before replacing it.
+    # If the path is not existed, the Config Manager will create the folders and file.
+
 
 [[config]]  # Multiple config files can be listed
-# Both the source path and the destination path can be a command.
-# The command will be executed and the output will be used as the source path.
+    # Both the source path and the destination path can be a command.
+    # The command will be executed and the output will be used as the source path.
 src = "echo './my.conf'"
 dst = "cmd --config-file"
 
-# Dependencies [Optional]
-# Dependencies are installed before placing the config files.
-[[install]]
-# The package name used in installation.
+[[install]]  # Dependencies (Optional)
+    # Dependencies are installed before placing the config files.
 name = "cmgr"  # (Required)
-# The package command to test if the package is already installed.
-# If not provided, will use the package name as the command.
-# The short version `cmd` is also supported.
+    # The package name used in installation.
 command = "cmgr"  # (Optional)
-# The Package manager to install the package.
-# If not provided, will use the default package manager, which is Scoop for Windows,Homebrew for macOS.
-# The short version `mgr` is also supported.
+    # The package command to test if the package is already installed.
+    # If not provided, will use the package name as the command.
+    # The short version `cmd` is also supported.
 manager = "pip3"  # (Optional)
+    # The Package manager to install the package.
+    # If not provided, will use the default package manager, which is Scoop for Windows, Homebrew for macOS.
+    # The short version `mgr` is also supported.
 
 [[install]]  # Multiple dependencies can be listed
-# Package name can be a table.
-# The platform name as the key and the package name as the value.
-# Platforms: `Windows`, `Darwin`, `Linux`, `FreeBSD`, etc. `*` is the default.
 name = {"Windows" = "python", "Darwin"= "python", "*" = "python3"}
-# Package manager can be a table.
-# The platform name as the key and the package manager command as the value.
-# Supported package manager: `scoop`, `choco`, `brew`, `port`, `apt`, `pip`, `pip3`.
+    # Package name can be a table.
+    # The platform name as the key and the package name as the value.
+    # Platforms: `Windows`, `Darwin`, `Linux`, `FreeBSD`, etc. `*` is the default.
 manager = {"Windows" = "choco", "Darwin"= "port", "*" = "pip3"}
+    # Package manager can be a table.
+    # The platform name as the key and the package manager command as the value.
+    # Supported package manager: `scoop`, `choco`, `brew`, `port`, `apt`, `pip`, `pip3`.

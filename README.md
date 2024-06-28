@@ -7,13 +7,13 @@
 
 ```sh
 pip install cmgr  # Install cmgr
-
-cmgr  # Run cmgr.
+cmgr  # Run cmgr. Detect all `cmgr.toml` under current folder.
 ```
 
 ## Installation
 
 ```sh
+# using pip
 pip install --user cmgr  # install cmgr
 pip install --upgrade cmgr # upgrade cmgr
 pip uninstall cmgr  # uninstall cmgr
@@ -42,7 +42,7 @@ cmgr install ping3 -c/--command 'ping3'  # Use specific command to detect if the
 cmgr install ping3 -m/--manager 'pip'  # Use specific package manager to install the package.
 
 # Copy configuration
-cmgr config "bash.conf" "~/.bashrc"  # Copy `bash.conf` to `~/` as `.bashrc`.
+cmgr config "bash.conf" "~/.bashrc"  # Copy `./bash.conf` to `~/.bashrc`.
 cmgr config "bash.conf" "~/.bashrc" -n/--name "BASH"  # Copy `bash.conf` to `~/` as `.bashrc` with specific name in output.
 ```
 
