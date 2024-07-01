@@ -12,7 +12,7 @@ else:
     raise ImportError("No TOML parser lib found in {libs}!")
 
 
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 
 
 CMGR_PROFILE_FILENAME = 'cmgr.toml'  # Config Manager profile is the config file for cmgr itself.
@@ -114,13 +114,13 @@ def make_configmanager(info: dict) -> dict:
     if not isinstance(info.get('path'), cct.Path):
         info['path'] = cct.get_path(info.get('path'))
     if info.get('install'):
-        for package in info.get('install'):
+        for package in info['install']:
             if not package.get('name'):
                 _raise(f"Package name not found in {package}!")
             if not package.get('cmd'):
                 package['cmd'] = package['name']
     if info.get('config'):
-        for config in info.get('config'):
+        for config in info['config']:
             if not config.get('src'):
                 _raise(f"Source config file path not found in {config}!")
             src = _parse_src_or_dst(config.get('src'))

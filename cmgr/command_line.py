@@ -43,7 +43,7 @@ def install(name: str, command: str = None, manager: str = None):
 @click.argument("src", default=None)
 @click.argument("dst", default=None)
 @click.option("-n", "--name", "name", default=None, help="The name of the package.")
-def config(src: str, dst: str, name: str = None):
+def config(src: str, dst: str, name: str = ""):
     cmgr_info: dict = {
         "config": [
             {
