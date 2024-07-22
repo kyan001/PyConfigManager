@@ -20,7 +20,7 @@ dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [[project.authors]]
 name = "Kyan"
-email = "kai@kyan001.com"
+email = "k@kyan001.com"
 
 [project.urls]
 Homepage = "https://github.com/kyan001/PyConfigManager"
