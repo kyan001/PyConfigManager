@@ -12,7 +12,7 @@ else:
     raise ImportError("No TOML parser lib found in {libs}!")
 
 
-__version__ = "0.0.9"
+__version__ = "0.0.11"
 
 
 CMGR_PROFILE_FILENAME = 'cmgr.toml'  # Config Manager profile is the config file for cmgr itself.
@@ -38,7 +38,7 @@ def _parse_src_or_dst(path_or_cmd: str) -> cct.Path:
     path = cct.get_path(path_or_cmd)
     if path.exists:  # file exists, path_or_cmd is a file path
         return path
-    if cct.is_cmd_exist(path_or_cmd):  # command exists, path_or_cmd is a command
+    if cct.is_cmd_exist(path_or_cmd.split()[0]):  # command exists, path_or_cmd is a command
         return cct.get_path(cct.read_cmd(path_or_cmd).strip())  # read the output of the command as the path
     return path  # path_or_cmd is not a existing file or a valid command, guess it's a file path
 
