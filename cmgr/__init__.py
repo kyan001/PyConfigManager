@@ -12,7 +12,7 @@ else:
     raise ImportError("No TOML parser lib found in {libs}!")
 
 
-__version__ = "0.0.11"
+__version__ = "0.0.12"
 
 
 CMGR_PROFILE_FILENAME = 'cmgr.toml'  # Config Manager profile is the config file for cmgr itself.
@@ -112,8 +112,8 @@ def make_configmanager(info: dict) -> dict:
         info['path'] = os.getcwd()
     elif not info.get('name'):
         info['name'] = info['path'].parent.basename
-    if not isinstance(info.get('path'), cct.Path):
-        info['path'] = cct.get_path(info.get('path'))
+    if not isinstance(info['path'], cct.Path):
+        info['path'] = cct.get_path(info['path'])
     if info.get('install'):
         for package in info['install']:
             if not package.get('name'):
@@ -126,7 +126,7 @@ def make_configmanager(info: dict) -> dict:
                 _raise(f"Source config file path not found in {config}!")
             src = _parse_src_or_dst(config.get('src'))
             if not src.exists and not os.path.isabs(src):  # try to find the source file in the directory of the Config Manager profile.
-                src = cct.get_path(os.path.join(info.get('path').parent, config.get('src')))
+                src = cct.get_path(os.path.join(info['path'].parent, config.get('src')))
             if not src.exists:
                 _raise(f"Source config file not found: {src}!")
             config['src'] = src
@@ -145,7 +145,7 @@ def make_configmanager(info: dict) -> dict:
     return info
 
 
-def discover_cmgr_confs(filename: str, root: str = None) -> list[cct.Path]:
+def discover_cmgr_confs(filename: str, root: str = "") -> list[cct.Path]:
     """Discover Config Manager profiles in the given directory or its subdirectories.
 
     Args:
