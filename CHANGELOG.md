@@ -1,4 +1,7 @@
 # Change Log
+## 0.0.15 (2024-08-16)
+* Feature: 'dst' and 'src' now support platform-specific path or command.
+
 ## 0.0.9 (2024-07-10)
 * Bug fix: dst now correctly expends the `~` character to the user home directory.
 

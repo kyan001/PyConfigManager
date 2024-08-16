@@ -12,7 +12,7 @@ else:
     raise ImportError("No TOML parser lib found in {libs}!")
 
 
-__version__ = "0.0.12"
+__version__ = "0.0.15"
 
 
 CMGR_PROFILE_FILENAME = 'cmgr.toml'  # Config Manager profile is the config file for cmgr itself.
@@ -33,6 +33,7 @@ def _parse_src_or_dst(path_or_cmd: str) -> cct.Path:
     Returns:
         cct.Path: The parsed path.
     """
+    path_or_cmd = cct.resolve_value(path_or_cmd) or ""
     if not path_or_cmd:
         _raise("The input of `_parse_src_or_dst()` is empty!")
     path = cct.get_path(path_or_cmd)
@@ -51,7 +52,7 @@ def print_profile_help() -> None:
     cit.info(f"For more details, visit: {example_profile_url}")
 
 
-def ensure_packages(packages: iter) -> bool:
+def ensure_packages(packages) -> bool:
     """Ensure the given packages are installed.
 
     Args:
