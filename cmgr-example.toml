@@ -26,7 +26,7 @@ dst = "cmd --config-file"
 [[config]]  # Platform-specific config files can be listed
     # The platform name as the key and the config file as the value.
     # Platforms: `Windows`, `Darwin`, `Linux`, `FreeBSD`, etc. `*` is the default.
-src = {"Windows" = '%LocalAppData%\conf.toml', "Darwin"= "~/conf.toml", "*" = "conf.toml"}  # Platform-specific paths
+src = {"Windows" = "%LocalAppData%\\conf.toml", "Darwin"= "~/conf.toml", "*" = "conf.toml"}  # Platform-specific paths
 dst = {"Windows" = "Write-Host('win.conf')", "Darwin"= "echo 'mac.conf'", "*" = "echo 'linux.conf'"}  # Platform-specific commands
 
 # Dependencies
