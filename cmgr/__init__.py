@@ -12,7 +12,7 @@ else:
     raise ImportError("No TOML parser lib found in {libs}!")
 
 
-__version__ = "0.0.15"
+__version__ = "0.1.0"
 
 
 CMGR_PROFILE_FILENAME = 'cmgr.toml'  # Config Manager profile is the config file for cmgr itself.
@@ -65,7 +65,11 @@ def ensure_packages(packages) -> bool:
         package_name = package.get('name')
         package_cmd = package.get('command') or package.get('cmd')
         package_manager = package.get('manager') or package.get('mgr')
-        if cct.is_cmd_exist(package_cmd):  # if the package is already installed, nothing shown.
+        if package_cmd := cct.resolve_value(package_cmd):  # different commands for different platforms
+            if cct.is_cmd_exist(package_cmd):  # if the package is already installed, nothing shown.
+                continue
+        else:
+            cit.warn(f"No available command found for package: {package_name}, skipped")
             continue
         cit.info(f"Installing package: {package_name}")
         if package_manager:
@@ -109,17 +113,17 @@ def make_configmanager(info: dict) -> dict:
     Returns:
         dict: The calibrated Config Manager info.
     """
-    if not info.get('path'):
+    if not info.get('path'):  # ensure 'path'
         info['path'] = os.getcwd()
-    elif not info.get('name'):
-        info['name'] = info['path'].parent.basename
-    if not isinstance(info['path'], cct.Path):
+    if not isinstance(info['path'], cct.Path):  # ensure 'path' is a Path object
         info['path'] = cct.get_path(info['path'])
+    if not info.get('name'):  # ensure 'name'
+        info['name'] = info['path'].parent.basename
     if info.get('install'):
         for package in info['install']:
-            if not package.get('name'):
+            if not package.get('name'): # ensure 'install.name'
                 _raise(f"Package name not found in {package}!")
-            if not package.get('cmd'):
+            if not package.get('cmd'):  # ensure 'install.cmd'
                 package['cmd'] = package['name']
     if info.get('config'):
         for config in info['config']:

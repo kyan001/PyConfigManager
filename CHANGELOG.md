@@ -1,4 +1,7 @@
 # Change Log
+## 0.1.0 (2024-11-30)
+* Feature: 'command' in 'install' now support platform-specific command.
+
 ## 0.0.15 (2024-08-16)
 * Feature: 'dst' and 'src' now support platform-specific path or command.
 

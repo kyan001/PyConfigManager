@@ -48,6 +48,10 @@ name = {"Windows" = "python", "Darwin"= "python", "*" = "python3"}
     # Package name can be a table.
     # The platform name as the key and the package name as the value.
     # Platforms: `Windows`, `Darwin`, `Linux`, `FreeBSD`, etc. `*` is the default.
+command = {"Windows" = "py", "Darwin"= "python", "*" = "python3"}
+    # Package command can be a table.
+    # The platform name as the key and the package command as the value.
+    # Platforms: `Windows`, `Darwin`, `Linux`, `FreeBSD`, etc. `*` is the default.
 manager = {"Windows" = "choco", "Darwin"= "port", "*" = "pip3"}
     # Package manager can be a table.
     # The platform name as the key and the package manager command as the value.
