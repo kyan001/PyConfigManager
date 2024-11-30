@@ -16,6 +16,9 @@ dst = "~/.my.comf"  # Required
     # Destination config file path, which should be the path to the current config.
     # If the path is existed, the Config Manager will backup the file before replacing it.
     # If the path is not existed, the Config Manager will create the folders and file.
+skip = false  # Optional
+    # Skip this config.
+    # If not provided, will not skip this config.
 
 [[config]]  # Multiple config files can be listed
     # Both the source path and the destination path can be a command.
@@ -28,6 +31,7 @@ dst = "cmd --config-file"
     # Platforms: `Windows`, `Darwin`, `Linux`, `FreeBSD`, etc. `*` is the default.
 src = {"Windows" = "%LocalAppData%\\conf.toml", "Darwin"= "~/conf.toml", "*" = "conf.toml"}  # Platform-specific paths
 dst = {"Windows" = "Write-Host('win.conf')", "Darwin"= "echo 'mac.conf'", "*" = "echo 'linux.conf'"}  # Platform-specific commands
+skip = {"Windows" = true, "Darwin"= false, "*" = false}  # Platform-specific skips
 
 # Dependencies
 [[install]]  # Optional
@@ -37,22 +41,33 @@ name = "cmgr"  # Required
 command = "cmgr"  # Optional
     # The package command to test if the package is already installed.
     # If not provided, will use the package name as the command.
-    # The short version `cmd` is also supported.
 manager = "pip3"  # Optional
     # The Package manager to install the package.
     # If not provided, will use the default package manager, which is Scoop for Windows, Homebrew for macOS.
     # The short version `mgr` is also supported.
+    # Supported package manager: `scoop`, `choco`, `brew`, `port`, `apt`, `snap`, `pip`, `pip3`, `pipx`.
+skip = false  # Optional
+    # Skip this dependency installation.
+    # If not provided, will not skip this dependency installation.
 
-[[install]]  # Multiple dependencies can be listed
+[[install]]  # Multiple dependencies can be listed.
+name = "cmgr"  # Required
+cmd = "cmgr"  # Optional
+    # The short version of `command` is also supported.
+mgr = "pipx"  # Optional
+    # The short version of `manager` is also supported.
+
+[[install]]  # Platform-specific config files can be listed.
+    # # Platforms: `Windows`, `Darwin`, `Linux`, `FreeBSD`, etc. `*` is the default.
 name = {"Windows" = "python", "Darwin"= "python", "*" = "python3"}
     # Package name can be a table.
     # The platform name as the key and the package name as the value.
-    # Platforms: `Windows`, `Darwin`, `Linux`, `FreeBSD`, etc. `*` is the default.
-command = {"Windows" = "py", "Darwin"= "python", "*" = "python3"}
+cmd = {"Windows" = "py", "Darwin"= "python", "*" = "python3"}
     # Package command can be a table.
     # The platform name as the key and the package command as the value.
-    # Platforms: `Windows`, `Darwin`, `Linux`, `FreeBSD`, etc. `*` is the default.
-manager = {"Windows" = "choco", "Darwin"= "port", "*" = "pip3"}
+manager = {"Windows" = "choco", "Darwin"= "port", "*" = "snap"}
     # Package manager can be a table.
     # The platform name as the key and the package manager command as the value.
-    # Supported package manager: `scoop`, `choco`, `brew`, `port`, `apt`, `pip`, `pip3`.
+skip = {"Windows" = true, "Darwin"= false, "*" = false}
+    # Package installation skip can be a table.
+    # The platform name as the key and if skip the installation as the value.

@@ -1,4 +1,7 @@
 # Change Log
+## 0.2.3 (2024-11-30)
+* Feature: 'config' and 'install' now support skip and platform-specific skips.
+
 ## 0.1.0 (2024-11-30)
 * Feature: 'command' in 'install' now support platform-specific command.
 

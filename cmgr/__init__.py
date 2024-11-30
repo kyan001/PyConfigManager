@@ -12,7 +12,7 @@ else:
     raise ImportError("No TOML parser lib found in {libs}!")
 
 
-__version__ = "0.1.0"
+__version__ = "0.2.3"
 
 
 CMGR_PROFILE_FILENAME = 'cmgr.toml'  # Config Manager profile is the config file for cmgr itself.
@@ -40,7 +40,7 @@ def _parse_src_or_dst(path_or_cmd: str) -> cct.Path:
     if path.exists:  # file exists, path_or_cmd is a file path
         return path
     if cct.is_cmd_exist(path_or_cmd.split()[0]):  # command exists, path_or_cmd is a command
-        return cct.get_path(cct.read_cmd(path_or_cmd).strip())  # read the output of the command as the path
+        return cct.get_path(cct.read_cmd(path_or_cmd, verbose=False).strip())  # read the output of the command as the path
     return path  # path_or_cmd is not a existing file or a valid command, guess it's a file path
 
 
@@ -56,7 +56,7 @@ def ensure_packages(packages) -> bool:
     """Ensure the given packages are installed.
 
     Args:
-        packages (iter): The package infos to install. Each package info is a dict with keys: name, command (optional), manager (optional).
+        packages (iter): The package infos to install. Each package info is a dict with keys: name, command (optional), manager (optional), skip (optional).
 
     Returns:
         bool: True if all packages are installed, False otherwise.
@@ -65,12 +65,12 @@ def ensure_packages(packages) -> bool:
         package_name = package.get('name')
         package_cmd = package.get('command') or package.get('cmd')
         package_manager = package.get('manager') or package.get('mgr')
+        if package.get('skip') and cct.resolve_value(package['skip']):  # check skip
+            cit.warn(f"Package installation skipped: {package_name}")
+            continue
         if package_cmd := cct.resolve_value(package_cmd):  # different commands for different platforms
             if cct.is_cmd_exist(package_cmd):  # if the package is already installed, nothing shown.
                 continue
-        else:
-            cit.warn(f"No available command found for package: {package_name}, skipped")
-            continue
         cit.info(f"Installing package: {package_name}")
         if package_manager:
             result = cct.install_package(package_name, package_manager)
@@ -127,19 +127,24 @@ def make_configmanager(info: dict) -> dict:
                 package['cmd'] = package['name']
     if info.get('config'):
         for config in info['config']:
-            if not config.get('src'):
-                _raise(f"Source config file path not found in {config}!")
-            src = _parse_src_or_dst(config.get('src'))
-            if not src.exists and not os.path.isabs(src):  # try to find the source file in the directory of the Config Manager profile.
-                src = cct.get_path(os.path.join(info['path'].parent, config.get('src')))
-            if not src.exists:
-                _raise(f"Source config file not found: {src}!")
-            config['src'] = src
-            if not config.get('dst'):
-                _raise(f"Destination config file path not found in {config}!")
-            config['dst'] = cct.get_path(_parse_src_or_dst(config.get('dst')))
-            if not config.get('name'):
-                config['name'] = src.basename
+            if config.get('skip') and cct.resolve_value(config['skip']):  # check skip
+                config['skip'] = True
+                config['name'] = config.get('name') or config.get('src')  # ensure 'name'
+            else:
+                config['skip'] = False
+                if not config.get('src'):
+                    _raise(f"Source config file path not found in {config}!")
+                src = _parse_src_or_dst(config.get('src'))
+                if not src.exists and not os.path.isabs(src):  # try to find the source file in the directory of the Config Manager profile.
+                    src = cct.get_path(os.path.join(info['path'].parent, src))
+                if not src.exists:
+                    _raise(f"Source config file not found: {src}!")
+                config['src'] = src
+                if not config.get('dst'):
+                    _raise(f"Destination config file path not found in {config}!")
+                config['dst'] = cct.get_path(_parse_src_or_dst(config.get('dst')))
+                if not config.get('name'):
+                    config['name'] = src.basename
     if not info.get('name'):
         if info.get('config'):
             info['name'] = info['config'][0]['name']
@@ -196,6 +201,9 @@ def run_configmanager(config_manager: dict) -> None:
         for configlet in configlets:
             cit.start()
             cit.title(f"Configurating {configlet.get('name')}")
+            if configlet.get('skip'):
+                cit.warn("Config skipped!")
+                continue
             cit.info(f"Source: `{configlet.get('src')}`")
             cit.info(f"Destination: `{configlet.get('dst')}`")
             src = configlet.get('src')
