@@ -2,20 +2,16 @@ import os
 
 import consoleiotools as cit
 import consolecmdtools as cct
-for lib in (libs := ['tomllib', 'tomli']):
-    try:
-        toml_parser = __import__(lib)
-        break
-    except ImportError:
-        pass
-else:
-    raise ImportError("No TOML parser lib found in {libs}!")
+try:
+    import tomllib as toml_parser
+except ImportError:
+    import tomli as toml_parser
 
 
-__version__ = "0.2.3"
-
+__version__ = "0.3.1"
 
 CMGR_PROFILE_FILENAME = 'cmgr.toml'  # Config Manager profile is the config file for cmgr itself.
+YES: bool = False  # If True, automatically confirm all prompts.
 
 
 def _raise(text: str):
@@ -213,7 +209,7 @@ def run_configmanager(config_manager: dict) -> None:
                 if diffs:
                     cit.info("Diff:")
                     cit.print("\n".join(diffs))
-                    if cit.get_input("Update config file? (y/n)", default='y').lower() != 'y':
+                    if not YES and cit.get_input("Update config file? (y/N)", default='y').lower() != 'y':
                         cit.warn(f"Config file for `{configlet.get('name')}` is not updated!")
                         continue
                 else:

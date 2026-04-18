@@ -35,6 +35,7 @@ cmgr  # Run cgmr. Will looking for all cmgr.toml under current folder.
 cmgr -p/--profile '/path/to/root/cmgr.toml'  # Run cmgr with specific profile.
 cmgr -r/--root '/path/to/root/'  # Run cmgr with specific root folder.
 cmgr -n/--name 'my-cmgr.toml'  # Run cmgr with specific profile's filename.
+cmgr -y/--yes  # Automatically confirm all prompts.
 
 # Install package
 cmgr install ping3  # Install a package named ping3. Using default package manager.

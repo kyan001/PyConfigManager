@@ -1,4 +1,11 @@
 # Change Log
+## 0.3.1 (2026-04-18)
+* Improvement: Updated the license in pyproject.toml to MIT.
+
+## 0.3.0 (2026-04-18)
+* Feature: Added `-y/--yes` flag to automatically confirm all prompts.
+* Bug fix: Fixed `cmgr -p` passing a path string directly to `run_configmanager` instead of a config dict.
+
 ## 0.2.3 (2024-11-30)
 * Feature: 'config' and 'install' now support skip and platform-specific skips.
 

@@ -9,21 +9,23 @@ import cmgr
 @click.option("-p", "--profile", "profile", default=None, help="The path of the cmgr profile file.")
 @click.option("-n", "--name", "filename", default=cmgr.CMGR_PROFILE_FILENAME, help="The filename of the cmgr profile file.")
 @click.option("-r", "--root", "root", default=os.getcwd(), help="The root directory to discover config manager conf files.")
+@click.option("-y", "--yes", "yes", is_flag=True, default=False, help="Automatically confirm all prompts.")
 @click.version_option(version=cmgr.__version__)
 @click.pass_context
-def main(context: click.Context = None, profile: str = None, root: str = os.getcwd(), filename: str = cmgr.CMGR_PROFILE_FILENAME):
+def main(context: click.Context = None, profile: str = "", root: str = os.getcwd(), filename: str = cmgr.CMGR_PROFILE_FILENAME, yes: bool = False):
+    cmgr.YES = yes
     if context.invoked_subcommand is None:
         if not profile:
             return cmgr.run_all_configmanager(root=root, filename=filename)
         else:
-            return cmgr.run_configmanager(profile)
+            return cmgr.run_configmanager(cmgr.get_configmanager(profile))
 
 
 @main.command()
 @click.argument("name", default=None)
-@click.option("-c", "--command", "command", default=None, help="The command to detect the package installation.")
-@click.option("-m", "--manager", "manager", default=None, help="The package manager to install the package.")
-def install(name: str, command: str = None, manager: str = None):
+@click.option("-c", "--command", "command", default="", help="The command to detect the package installation.")
+@click.option("-m", "--manager", "manager", default="", help="The package manager to install the package.")
+def install(name: str, command: str = "", manager: str = ""):
     cmgr_info: dict = {
         "install": [
             {
